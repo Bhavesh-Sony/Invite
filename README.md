@@ -27,8 +27,8 @@ const INVITATION = {
     name: "Bhavisha",
     title: "Ghar ki Badi Beti",
     tagline: "Classy, Responsible & Drama Queen",
-    childhoodPhoto: "assets/images/bhavisha-face-chest.webp",
-    photoPosition: "50% 50%", // square face-to-chest crop
+    childhoodPhoto: "picss/Bhavisha_cropped_2.PNG",
+    photoPosition: "50% 50%",
   },
   groom: { /* ... */ },
   event: {
@@ -42,6 +42,7 @@ const INVITATION = {
   },
   invitationMessage: "We would be honoured...",
   reel: {
+    collagePhoto: "picss/collage.png",
     timings: { bride: 6800, meets: 1700, groom: 5300, camera: 4000 },
   },
   timeline: [ { icon, title, text }, ... ],
@@ -65,6 +66,7 @@ const INVITATION = {
 | `event.mapsLink` | “Navigate to Venue” button URL |
 | `invitationMessage` | Text inside the 3D flip card |
 | `photoPosition` | Horizontal/vertical focus for the childhood-photo crop |
+| `reel.collagePhoto` | Childhood collage ejected by the instant camera |
 | `reel.timings` | Duration in milliseconds for each animated reel scene |
 | `timeline` | Journey milestone cards |
 | `music` | Background piano audio file |

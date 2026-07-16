@@ -50,19 +50,19 @@
     <!-- ========== LANDING / HERO ========== -->
     <section id="landing" class="section section--hero" aria-labelledby="hero-title">
       <div class="hero__ornament" aria-hidden="true">✦</div>
-      <p class="hero__eyebrow" data-animate="fade">Together with their families</p>
       <h1 id="hero-title" class="hero__title" data-animate="fade">
         <span class="hero__ring" aria-hidden="true">💍</span>
         Engagement Invitation
       </h1>
-      <p class="hero__subtitle" data-animate="slide">
-        They joyfully invite you to celebrate the beginning of their forever.
-      </p>
       <div class="hero__names" data-animate="zoom">
         <span class="hero__name" id="hero-bride-name">Bhavisha</span>
         <span class="hero__ampersand">&amp;</span>
         <span class="hero__name" id="hero-groom-name">Bhavesh</span>
       </div>
+      <p class="hero__eyebrow" data-animate="fade">Together with their families</p>
+      <p class="hero__subtitle" data-animate="slide">
+        Joyfully invite you to celebrate the beginning of their forever
+      </p>
       <a href="#story" class="scroll-cue" aria-label="Scroll to the story">
         <span class="scroll-cue__chevron" aria-hidden="true"></span>
       </a>
@@ -179,8 +179,7 @@
         <div class="reel-scene reel-scene--camera" id="scene-camera" aria-hidden="true">
           <div class="instant-photo">
             <div class="instant-photo__image">
-              <img data-person-photo="bride" alt="" />
-              <img data-person-photo="groom" alt="" />
+              <img id="reel-collage-photo" alt="Bhavisha and Bhavesh childhood collage" />
             </div>
           </div>
           <div class="instant-camera" aria-hidden="true">
@@ -220,7 +219,7 @@
               <img data-person-photo="groom" alt="" />
             </div>
           </div>
-          <p class="poster__invite">Join us in the engagement celebration of</p>
+          <p class="poster__invite">Join us for the engagement celebration of</p>
           <p class="poster__names" id="poster-names"></p>
           <button type="button" class="poster__replay" id="poster-replay">Watch again</button>
         </div>
@@ -235,7 +234,6 @@
           <div class="flip-card__face flip-card__face--front">
             <span class="flip-card__ornament" aria-hidden="true">✦</span>
             <p class="flip-card__prompt">Tap to Reveal Your Invitation</p>
-            <span class="flip-card__hint">Click or press Enter</span>
           </div>
           <div class="flip-card__face flip-card__face--back">
             <span class="flip-card__ornament" aria-hidden="true">💍</span>
@@ -258,7 +256,6 @@
           </div>
           <canvas id="scratch-canvas" class="scratch-card__canvas" aria-label="Scratch card surface"></canvas>
         </div>
-        <button type="button" class="btn btn--ghost" id="scratch-reveal-btn">Reveal Date</button>
       </div>
       <div class="celebration" id="celebration" aria-hidden="true"></div>
     </section>

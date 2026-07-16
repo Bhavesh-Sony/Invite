@@ -10,7 +10,7 @@ const INVITATION = {
     name: "Bhavisha",
     title: "Ghar ki Badi Beti",
     tagline: "Classy, Responsible & Drama Queen",
-    childhoodPhoto: "assets/images/bhavisha-face-chest.webp",
+    childhoodPhoto: "picss/Bhavisha_cropped_2.PNG",
     /** Horizontal and vertical focus inside the square reel frame. */
     photoPosition: "50% 50%",
   },
@@ -19,8 +19,9 @@ const INVITATION = {
     name: "Bhavesh",
     title: "Ghar ka Chota Beta",
     tagline: "Calm, Funny & Sabka Favourite",
-    childhoodPhoto: "assets/images/bhavesh-face-chest.webp",
-    photoPosition: "50% 50%",
+    childhoodPhoto: "picss/bhavesh_cropped.JPG",
+    /** Places his eyes on the same horizontal line as Bhavisha's. */
+    photoPosition: "50% 65%",
   },
 
   event: {
@@ -29,8 +30,7 @@ const INVITATION = {
     dateISO: "2026-08-14T18:00:00+05:30",
     time: "6:00 PM onwards",
     venue: "Sobremesa",
-    address:
-      "Road Number 31, Aditya Enclave, Venkatagiri, Jubilee Hills, Hyderabad, Telangana 500033",
+    address: "Road no 31, Jubilee Hills, Hyderabad",
     mapsEmbedSrc:
       "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.493319522981!2d78.40522399999999!3d17.436087!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb91ea20a8f355%3A0x7daaca89e91df5eb!2sSobremesa%3A%20Cafe%E2%80%99%20Bakehouse%20Kitchen!5e0!3m2!1sen!2sin!4v1784110628487!5m2!1sen!2sin",
     mapsLink: "https://maps.app.goo.gl/j2TpvajXoqkHiPVU9",
@@ -40,6 +40,7 @@ const INVITATION = {
     "We would be honoured to celebrate this beautiful beginning with your presence.",
 
   reel: {
+    collagePhoto: "picss/collage.png",
     timings: {
       bride: 6800,
       meets: 1700,
@@ -103,6 +104,8 @@ function initFromConfig() {
   // Childhood reel photos and copy
   setReelPhotos("bride", bride);
   setReelPhotos("groom", groom);
+  const collagePhoto = $("#reel-collage-photo");
+  if (collagePhoto) collagePhoto.src = INVITATION.reel.collagePhoto;
   $("#reel-bride-title").textContent = bride.title;
   $("#reel-bride-tagline").textContent = bride.tagline;
   $("#reel-groom-title").textContent = groom.title;
@@ -243,6 +246,7 @@ const Loader = {
     const urls = [
       INVITATION.bride.childhoodPhoto,
       INVITATION.groom.childhoodPhoto,
+      INVITATION.reel.collagePhoto,
     ];
     let loaded = 0;
     const total = urls.length + 1; // +1 for audio metadata attempt
@@ -497,7 +501,6 @@ const ScratchCard = {
   init() {
     const canvas = $("#scratch-canvas");
     const card = $("#scratch-card");
-    const revealBtn = $("#scratch-reveal-btn");
     if (!canvas || !card) return;
 
     this.canvas = canvas;
@@ -532,7 +535,6 @@ const ScratchCard = {
     canvas.addEventListener("pointerleave", end);
     canvas.addEventListener("pointercancel", end);
 
-    revealBtn?.addEventListener("click", () => this.reveal());
   },
 
   setupCanvas() {
