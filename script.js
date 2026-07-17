@@ -454,66 +454,22 @@ const StoryController = {
 };
 
 /* ============================================================
-   AUTO SCROLL — slow, seamless, cancellable
+   AUTO SCROLL — unused (manual scroll only)
    ============================================================ */
 
 const AutoScroll = {
-  token: 0,
-  raf: null,
-
-  cancel() {
-    this.token++;
-    if (this.raf) cancelAnimationFrame(this.raf);
-    this.raf = null;
-  },
-
-  /**
-   * Glide the page to targetY at a constant, readable pace.
-   * @param {number} targetY  Absolute scroll position.
-   * @param {number} speed    Pixels per millisecond (default ~90px/s).
-   */
-  to(targetY, speed = 0.09) {
-    this.cancel();
-    const myToken = this.token;
-    const maxY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-    const goal = Math.min(Math.max(0, targetY), maxY);
-
-    return new Promise((resolve) => {
-      if (Math.abs(goal - window.scrollY) < 2) return resolve(true);
-      const dir = Math.sign(goal - window.scrollY);
-      let last = performance.now();
-
-      const step = (now) => {
-        if (myToken !== this.token) return resolve(false);
-        const dt = now - last;
-        last = now;
-        const next = window.scrollY + speed * dt * dir;
-        if ((dir > 0 && next >= goal) || (dir < 0 && next <= goal)) {
-          window.scrollTo(0, goal);
-          this.raf = null;
-          return resolve(true);
-        }
-        window.scrollTo(0, next);
-        this.raf = requestAnimationFrame(step);
-      };
-      this.raf = requestAnimationFrame(step);
-    });
+  cancel() {},
+  to() {
+    return Promise.resolve(true);
   },
 };
 
 /* ============================================================
-   JOURNEY CONTROLLER — staged scroll path
+   JOURNEY CONTROLLER — arrow starts the reel (manual scroll only)
    ============================================================ */
 
 const JourneyController = {
-  journeyId: 0,
   started: false,
-  scratchResolve: null,
-  guiding: false,
-  // Gentle reading pace (px/ms) for the seamless auto-scroll.
-  SLOW: 0.12,
-  // Brisker pace for the arrow tap that kicks off the reel.
-  QUICK: 0.55,
 
   init() {
     const cue = $("#scroll-cue");
@@ -522,108 +478,36 @@ const JourneyController = {
       this.beginFromHero();
     });
 
-    StoryController.onComplete = () => this.afterReel();
+    // No auto-scroll after the reel — guests scroll manually.
+    StoryController.onComplete = null;
   },
 
   cancelTail() {
-    this.journeyId++;
-    AutoScroll.cancel();
+    /* kept for StoryController replay hooks */
   },
 
   async beginFromHero() {
     if (this.started && StoryController.running) return;
     this.started = true;
-    this.guiding = true;
-    this.cancelTail();
-    const id = this.journeyId;
 
-    // User gesture — unlock / start background music.
     MusicPlayer.start();
 
-    await AutoScroll.to(this.topOf("#story"), this.QUICK);
-    if (id !== this.journeyId) return;
-
-    // Keep the reel stage centered while it plays.
-    $("#story")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    // Jump straight to the reel so playback starts quickly.
+    const story = $("#story");
+    if (story) {
+      story.scrollIntoView({ behavior: "auto", block: "start" });
+    }
 
     if (prefersReducedMotion()) {
       StoryController.showPoster();
-      await wait(400);
-      await this.afterReel();
       return;
     }
 
-    await StoryController.play({ advanceJourney: true });
+    await StoryController.play({ advanceJourney: false });
   },
 
-  topOf(sel) {
-    const el = $(sel);
-    return el ? el.getBoundingClientRect().top + window.scrollY : 0;
-  },
-
-  /** Prefer landing so the scratch card sits comfortably in view. */
-  scratchTargetY() {
-    const scratch = $("#scratch-section") || $("#invite-reveal");
-    if (!scratch) return 0;
-    const rect = scratch.getBoundingClientRect();
-    const absoluteTop = rect.top + window.scrollY;
-    // Leave a little breathing room above the scratch block.
-    return Math.max(0, absoluteTop - Math.min(80, window.innerHeight * 0.08));
-  },
-
-  revealWithin(sel) {
-    $$(`${sel} [data-animate]`).forEach((node) => node.classList.add("is-visible"));
-  },
-
-  async afterReel() {
-    const id = ++this.journeyId;
-    await wait(prefersReducedMotion() ? 150 : 1000);
-    if (id !== this.journeyId) return;
-
-    this.revealWithin("#invite-reveal");
-
-    if (prefersReducedMotion()) {
-      $("#invite-reveal")?.scrollIntoView();
-      return;
-    }
-
-    // 1) Seamless glide from the finished reel down to the scratch stage.
-    await AutoScroll.to(this.scratchTargetY(), this.SLOW);
-    if (id !== this.journeyId) return;
-
-    // Nudge animate-ins once parked at the scratch page.
-    this.revealWithin("#invite-reveal");
-
-    // 2) Pause until the guest reveals the engagement details.
-    await this.waitForScratch(id);
-    if (id !== this.journeyId) return;
-
-    // Let the reveal + celebration breathe before moving on.
-    await wait(1400);
-    if (id !== this.journeyId) return;
-
-    // 3) Resume seamless scroll all the way to the footer.
-    const maxY = document.documentElement.scrollHeight - window.innerHeight;
-    await AutoScroll.to(maxY, this.SLOW);
-    this.guiding = false;
-  },
-
-  waitForScratch(id) {
-    if (ScratchCard.revealed) return Promise.resolve();
-    return new Promise((resolve) => {
-      this.scratchResolve = () => {
-        if (id === this.journeyId) resolve();
-      };
-    });
-  },
-
-  /** Called when the guest finishes scratching. */
   onScratchRevealed() {
-    if (this.scratchResolve) {
-      const resolve = this.scratchResolve;
-      this.scratchResolve = null;
-      resolve();
-    }
+    /* no auto-scroll */
   },
 };
 
@@ -960,6 +844,10 @@ const MusicPlayer = {
    ============================================================ */
 
 document.addEventListener("DOMContentLoaded", async () => {
+  // Always open the invitation from the top on refresh / revisit.
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  window.scrollTo(0, 0);
+
   initFromConfig();
   Decorations.init();
   MusicPlayer.init();
@@ -970,6 +858,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   await Loader.start();
   MusicPlayer.start();
+  window.scrollTo(0, 0);
 
   ScrollReveal.init();
   $$("#landing [data-animate]").forEach((el, i) => {
