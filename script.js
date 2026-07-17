@@ -509,10 +509,11 @@ const JourneyController = {
   journeyId: 0,
   started: false,
   scratchResolve: null,
+  guiding: false,
   // Gentle reading pace (px/ms) for the seamless auto-scroll.
-  SLOW: 0.11,
+  SLOW: 0.12,
   // Brisker pace for the arrow tap that kicks off the reel.
-  QUICK: 0.5,
+  QUICK: 0.55,
 
   init() {
     const cue = $("#scroll-cue");
@@ -520,11 +521,6 @@ const JourneyController = {
       e.preventDefault();
       this.beginFromHero();
     });
-
-    // Let guests take over at any time — a manual gesture stops auto-scroll.
-    const takeOver = () => AutoScroll.cancel();
-    window.addEventListener("wheel", takeOver, { passive: true });
-    window.addEventListener("touchmove", takeOver, { passive: true });
 
     StoryController.onComplete = () => this.afterReel();
   },
@@ -537,11 +533,18 @@ const JourneyController = {
   async beginFromHero() {
     if (this.started && StoryController.running) return;
     this.started = true;
+    this.guiding = true;
     this.cancelTail();
     const id = this.journeyId;
 
+    // User gesture — unlock / start background music.
+    MusicPlayer.start();
+
     await AutoScroll.to(this.topOf("#story"), this.QUICK);
     if (id !== this.journeyId) return;
+
+    // Keep the reel stage centered while it plays.
+    $("#story")?.scrollIntoView({ behavior: "smooth", block: "start" });
 
     if (prefersReducedMotion()) {
       StoryController.showPoster();
@@ -558,16 +561,25 @@ const JourneyController = {
     return el ? el.getBoundingClientRect().top + window.scrollY : 0;
   },
 
+  /** Prefer landing so the scratch card sits comfortably in view. */
+  scratchTargetY() {
+    const scratch = $("#scratch-section") || $("#invite-reveal");
+    if (!scratch) return 0;
+    const rect = scratch.getBoundingClientRect();
+    const absoluteTop = rect.top + window.scrollY;
+    // Leave a little breathing room above the scratch block.
+    return Math.max(0, absoluteTop - Math.min(80, window.innerHeight * 0.08));
+  },
+
   revealWithin(sel) {
     $$(`${sel} [data-animate]`).forEach((node) => node.classList.add("is-visible"));
   },
 
   async afterReel() {
     const id = ++this.journeyId;
-    await wait(prefersReducedMotion() ? 150 : 900);
+    await wait(prefersReducedMotion() ? 150 : 1000);
     if (id !== this.journeyId) return;
 
-    // Reveal the invitation + scratch content as it comes into view.
     this.revealWithin("#invite-reveal");
 
     if (prefersReducedMotion()) {
@@ -575,21 +587,25 @@ const JourneyController = {
       return;
     }
 
-    // 1) Seamlessly glide down to the invitation + scratch stage.
-    await AutoScroll.to(this.topOf("#invite-reveal"), this.SLOW);
+    // 1) Seamless glide from the finished reel down to the scratch stage.
+    await AutoScroll.to(this.scratchTargetY(), this.SLOW);
     if (id !== this.journeyId) return;
 
-    // 2) Pause here until the guest reveals the engagement details.
+    // Nudge animate-ins once parked at the scratch page.
+    this.revealWithin("#invite-reveal");
+
+    // 2) Pause until the guest reveals the engagement details.
     await this.waitForScratch(id);
     if (id !== this.journeyId) return;
 
     // Let the reveal + celebration breathe before moving on.
-    await wait(1600);
+    await wait(1400);
     if (id !== this.journeyId) return;
 
-    // 3) Resume the seamless scroll all the way to the footer.
+    // 3) Resume seamless scroll all the way to the footer.
     const maxY = document.documentElement.scrollHeight - window.innerHeight;
     await AutoScroll.to(maxY, this.SLOW);
+    this.guiding = false;
   },
 
   waitForScratch(id) {
@@ -917,7 +933,9 @@ const MusicPlayer = {
     if (!this.audio) return;
     try {
       this.audio.muted = false;
-      await this.audio.play();
+      if (this.audio.paused) {
+        await this.audio.play();
+      }
       this.setPlayingState(true);
       document.removeEventListener("pointerdown", this.resumeOnGesture, true);
       document.removeEventListener("keydown", this.resumeOnGesture, true);

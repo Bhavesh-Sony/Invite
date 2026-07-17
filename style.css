@@ -1795,7 +1795,7 @@ ul, ol { list-style: none; }
 }
 .footer__text span {
   font-family: var(--font-script);
-  font-size: 1.75rem;
+  font-size: 2.625rem;
   color: var(--rose-gold);
   font-style: normal;
 }
