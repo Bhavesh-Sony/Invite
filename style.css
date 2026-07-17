@@ -868,6 +868,17 @@ ul, ol { list-style: none; }
     radial-gradient(circle at 80% 80%, rgba(201, 169, 110, 0.16), transparent 30%);
 }
 
+.reel-scroll-hint {
+  margin: 0.85rem 0 0;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(104, 38, 51, 0.55);
+}
+
 .reel-controls {
   position: absolute;
   top: 1rem;
