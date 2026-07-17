@@ -311,7 +311,7 @@ ul, ol { list-style: none; }
    LANDING / HERO
    ============================================================ */
 .section--hero {
-  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -320,6 +320,58 @@ ul, ol { list-style: none; }
   max-width: none;
   padding: 4rem 1.5rem;
 }
+.stage {
+  min-height: 100svh;
+  box-sizing: border-box;
+}
+.hero__monogram {
+  position: relative;
+  isolation: isolate;
+  width: clamp(138px, 20vw, 178px);
+  aspect-ratio: 1;
+  margin-bottom: 1.65rem;
+  overflow: hidden;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 28%, #762e4a 0, #4a172c 52%, #2c0d1a 100%);
+  border: 1px solid rgba(244, 218, 163, 0.85);
+  box-shadow:
+    0 18px 45px rgba(74, 23, 44, 0.2),
+    0 0 0 7px rgba(201, 169, 110, 0.11),
+    inset 0 0 28px rgba(255, 236, 196, 0.12);
+}
+.hero__monogram::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  z-index: 2;
+  border: 1px solid rgba(244, 218, 163, 0.45);
+  border-radius: inherit;
+  pointer-events: none;
+}
+.hero__monogram-ring {
+  position: absolute;
+  inset: -55% 34%;
+  z-index: 3;
+  width: 18%;
+  background: linear-gradient(90deg, transparent, rgba(255, 247, 224, 0.3), transparent);
+  transform: rotate(24deg);
+  animation: monogramShimmer 5s ease-in-out infinite;
+  pointer-events: none;
+}
+.hero__monogram img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transform: scale(1.768);
+  mix-blend-mode: screen;
+}
+@keyframes monogramShimmer {
+  0%, 68% { transform: translateX(-170%) rotate(24deg); opacity: 0; }
+  76% { opacity: 1; }
+  100% { transform: translateX(430%) rotate(24deg); opacity: 0; }
+}
 .hero__ornament {
   font-size: 1.5rem;
   color: var(--champagne);
@@ -327,12 +379,12 @@ ul, ol { list-style: none; }
   animation: pulseBloom 3s ease-in-out infinite;
 }
 .hero__eyebrow {
-  font-family: var(--font-serif);
-  font-size: 1.1rem;
-  color: var(--text-muted);
-  letter-spacing: 0.15em;
+  font-family: var(--font-sans);
+  font-size: clamp(0.72rem, 1.8vw, 0.9rem);
+  color: var(--rose-gold);
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  font-weight: 400;
+  font-weight: 600;
   margin-bottom: 1rem;
 }
 .hero__title {
@@ -348,7 +400,7 @@ ul, ol { list-style: none; }
   font-family: var(--font-serif);
   font-size: clamp(1.15rem, 2.5vw, 1.4rem);
   color: var(--text);
-  max-width: 36em;
+  max-width: 34em;
   margin: 0 auto 2rem;
   font-style: italic;
   line-height: 1.7;
@@ -359,17 +411,18 @@ ul, ol { list-style: none; }
   justify-content: center;
   gap: 0.75rem;
   flex-wrap: wrap;
-  margin-bottom: 1.5rem;
+  margin: 0 0 1.25rem;
+  line-height: 1.15;
 }
 .hero__name {
-  font-family: var(--font-display);
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-family: var(--font-script);
+  font-size: clamp(2.4rem, 6vw, 4rem);
   color: var(--emerald);
-  font-weight: 600;
+  font-weight: 400;
 }
 .hero__ampersand {
   font-family: var(--font-script);
-  font-size: 2rem;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
   color: var(--champagne);
 }
 
@@ -805,7 +858,7 @@ ul, ol { list-style: none; }
    Faithful 9:16 scene treatment based on Video-969.mp4
    ============================================================ */
 .section--story {
-  min-height: 100vh;
+  min-height: 100svh;
   max-width: none;
   display: grid;
   place-items: center;
@@ -824,8 +877,7 @@ ul, ol { list-style: none; }
   gap: 0.5rem;
 }
 
-.reel-control,
-.poster__replay {
+.reel-control {
   min-height: 44px;
   padding: 0.55rem 0.9rem;
   border: 1px solid rgba(104, 38, 51, 0.25);
@@ -837,9 +889,7 @@ ul, ol { list-style: none; }
 }
 
 .reel-control:hover,
-.reel-control:focus-visible,
-.poster__replay:hover,
-.poster__replay:focus-visible {
+.reel-control:focus-visible {
   border-color: #682633;
   outline: 2px solid rgba(104, 38, 51, 0.25);
   outline-offset: 2px;
@@ -913,44 +963,61 @@ ul, ol { list-style: none; }
 
 .reel-person {
   position: relative;
-  width: 61%;
-  height: 52%;
-  margin-top: -7%;
+  width: 72%;
+  height: auto;
+  aspect-ratio: 540 / 820;
+  margin-top: -4%;
   transform-origin: 50% 70%;
 }
 
-.reel-person__body {
-  position: absolute;
-  inset: 8% 0 0;
+.reel-person__shell {
+  position: relative;
   width: 100%;
   height: 100%;
-  overflow: visible;
-  filter: drop-shadow(0 6px 5px rgba(66, 34, 41, 0.09));
+  filter: drop-shadow(0 8px 10px rgba(66, 34, 41, 0.12));
 }
 
-.reel-scene.is-active .reel-person__body {
+.reel-person__outfit {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  pointer-events: none;
+}
+
+.reel-scene.is-active .reel-person__outfit {
   animation: outfitGlow 2.4s 1s ease-in-out infinite alternate;
 }
 
-.reel-person__frame {
-  position: absolute;
-  z-index: 3;
-  top: 5%;
-  left: 50%;
-  width: 65%;
-  aspect-ratio: 1.1 / 1;
-  transform: translateX(-50%);
-  padding: 3.5%;
-  background: #2d2324;
-  border: 3px solid #caa86c;
-  box-shadow:
-    0 0 0 2px #4c3434,
-    0 6px 10px rgba(45, 35, 36, 0.22);
+.reel-person__frame,
+.poster-person__frame {
+  display: none;
+}
+
+.reel-person--bride .reel-person__frame {
+  left: 22%;
+  top: 8%;
+  width: 50%;
+  height: 40%;
+  transform: none;
+  background: transparent;
+}
+
+.reel-person--groom .reel-person__frame {
+  left: 23%;
+  top: 9.5%;
+  width: 60%;
+  height: 36%;
+  transform: none;
+  background: transparent;
 }
 
 .reel-person__photo,
 .instant-photo img,
-.poster-person img {
+.poster-person__frame img {
   width: 100%;
   height: 100%;
   display: block;
@@ -961,7 +1028,7 @@ ul, ol { list-style: none; }
 .reel-person__fallback {
   display: none;
   position: absolute;
-  inset: 8%;
+  inset: 0;
   align-items: center;
   justify-content: center;
   color: #fff;
@@ -971,30 +1038,9 @@ ul, ol { list-style: none; }
 
 .reel-person__fallback.is-visible { display: flex; }
 
-.reel-person__hand {
-  position: absolute;
-  z-index: 5;
-  top: 31%;
-  width: 13%;
-  aspect-ratio: 0.62;
-  border: 2px solid #4a3336;
-  border-radius: 50% 50% 45% 45%;
-  background: #f3d5bd;
-}
-
-.reel-person__hand--left {
-  left: 14%;
-  transform: rotate(-16deg);
-}
-
-.reel-person__hand--right {
-  right: 14%;
-  transform: rotate(16deg);
-}
-
 .reel-person__scribble {
   position: absolute;
-  z-index: 4;
+  z-index: 5;
   top: -2%;
   right: -4%;
   color: #7d001c;
@@ -1064,8 +1110,14 @@ ul, ol { list-style: none; }
   animation: meetsReveal 0.8s ease both;
 }
 
-/* Instant camera */
-.reel-scene--camera { justify-content: center; }
+/* Instant camera — horizontal camera/photo composition */
+.reel-scene--camera {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 3%;
+  padding: 8%;
+}
 
 .reel-scene--camera::after {
   content: "";
@@ -1081,80 +1133,31 @@ ul, ol { list-style: none; }
   animation: cameraFlash 0.5s 1.05s ease-out both;
 }
 
-.instant-camera {
-  position: absolute;
+.instant-camera-img {
+  position: relative;
   z-index: 3;
-  top: 35%;
-  width: 58%;
-  aspect-ratio: 1.12;
-  border-radius: 15% 15% 19% 19%;
-  background: linear-gradient(135deg, #96ded4, #62bbb6);
-  box-shadow: inset -10px -8px 0 rgba(34, 119, 116, 0.12), 0 12px 20px rgba(50, 98, 96, 0.16);
-}
-
-.instant-camera::before {
-  content: "";
-  position: absolute;
-  top: 9%;
-  left: 11%;
-  width: 18%;
-  height: 27%;
-  border-radius: 5px;
-  background: repeating-linear-gradient(90deg, #e9eee8 0 4px, #bac7c2 4px 6px);
-}
-
-.instant-camera__button {
-  position: absolute;
-  top: 12%;
-  right: 13%;
-  width: 9%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: #304e50;
-  box-shadow: 0 0 0 4px #bce7df;
-}
-
-.instant-camera__flash {
-  position: absolute;
-  top: 8%;
-  left: 39%;
-  width: 12%;
-  height: 17%;
-  border-radius: 3px;
-  background: #d7efe9;
-}
-
-.instant-camera__lens {
-  position: absolute;
-  left: 50%;
-  top: 57%;
-  width: 51%;
-  aspect-ratio: 1;
-  transform: translate(-50%, -50%);
-  border: 10px solid #bce7df;
-  border-radius: 50%;
-  background: #5caeaa;
-  box-shadow: 0 0 0 3px #356d6b, inset 0 0 0 5px #84cbc4;
-}
-
-.instant-camera__lens i {
-  position: absolute;
-  inset: 28%;
-  border: 5px solid #203c43;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #7ba9af, #172a33 62%);
+  top: auto;
+  left: auto;
+  width: 36%;
+  flex: 0 0 36%;
+  transform: none;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 20px rgba(50, 98, 96, 0.22));
+  pointer-events: none;
 }
 
 .instant-photo {
-  position: absolute;
-  z-index: 2;
-  top: 31%;
-  width: 52%;
-  aspect-ratio: 1.25;
-  padding: 4% 4% 10%;
+  position: relative;
+  z-index: 4;
+  top: auto;
+  width: 66%;
+  flex: 0 0 66%;
+  aspect-ratio: 0.82;
+  padding: 4% 4% 12%;
   background: #fff;
   border: 1px solid #bbb;
-  box-shadow: 0 4px 12px rgba(30, 30, 30, 0.16);
+  box-shadow: 0 12px 28px rgba(30, 30, 30, 0.2);
+  transform: rotate(2deg);
 }
 
 .instant-photo__image {
@@ -1168,16 +1171,12 @@ ul, ol { list-style: none; }
 .instant-photo__image img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  object-position: center;
+  object-fit: cover;
+  object-position: center 40%;
 }
 
-.reel-scene--camera.is-active .instant-camera {
+.reel-scene--camera.is-active .instant-camera-img {
   animation: cameraRise 1s cubic-bezier(0.2, 0.85, 0.25, 1) both;
-}
-
-.reel-scene--camera.is-active .instant-camera__lens {
-  animation: shutterPulse 0.35s 1.1s ease-out;
 }
 
 .reel-scene--camera.is-active .instant-photo {
@@ -1206,7 +1205,7 @@ ul, ol { list-style: none; }
 
 .poster__couple {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   gap: 4%;
   width: 100%;
@@ -1216,29 +1215,59 @@ ul, ol { list-style: none; }
 
 .poster-person {
   position: relative;
-  width: 38%;
+  width: 42%;
+  height: auto;
+  aspect-ratio: 540 / 820;
+  padding-top: 0;
+}
+
+.poster-person__shell {
+  position: relative;
+  width: 100%;
   height: 100%;
-  padding-top: 2%;
+  filter: drop-shadow(0 5px 4px rgba(66, 34, 41, 0.1));
 }
 
 .poster-person__outfit {
   position: absolute;
-  z-index: 1;
-  inset: 19% -2% 0;
-  width: 104%;
-  height: 84%;
-  overflow: visible;
-  filter: drop-shadow(0 5px 4px rgba(66, 34, 41, 0.1));
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  pointer-events: none;
 }
 
-.poster-person img {
+.poster-person__frame {
+  display: none;
+}
+
+.poster-person--bride .poster-person__frame {
+  left: 22%;
+  top: 8%;
+  width: 50%;
+  height: 40%;
+  background: transparent;
+}
+
+.poster-person--groom .poster-person__frame {
+  left: 23%;
+  top: 9.5%;
+  width: 60%;
+  height: 36%;
+  background: transparent;
+}
+
+.poster-person__frame img {
   position: relative;
   z-index: 3;
-  width: 82%;
-  height: 43%;
-  margin: 0 auto;
-  border: 3px solid #caa86c;
-  box-shadow: 0 0 0 2px #4c3434;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border: 0;
+  box-shadow: none;
+  object-fit: cover;
 }
 
 .reel-scene--poster.is-active .poster-person--bride {
@@ -1271,13 +1300,6 @@ ul, ol { list-style: none; }
   font: 700 clamp(1.75rem, 7.3vw, 2.5rem)/1.14 var(--font-casual);
 }
 
-.poster__replay {
-  min-height: 38px;
-  margin-top: auto;
-  padding: 0.4rem 0.8rem;
-  background: transparent;
-}
-
 @keyframes brideEnter {
   from { opacity: 0; transform: translateY(45%) scale(0.92); }
   to { opacity: 1; transform: translateY(0) scale(1); }
@@ -1289,8 +1311,8 @@ ul, ol { list-style: none; }
 }
 
 @keyframes frameBounce {
-  from { opacity: 0; transform: translateX(-50%) scale(0.72) rotate(-4deg); }
-  to { opacity: 1; transform: translateX(-50%) scale(1) rotate(0); }
+  from { opacity: 0; transform: scale(0.72) rotate(-4deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
 }
 
 @keyframes scribblePop {
@@ -1309,8 +1331,8 @@ ul, ol { list-style: none; }
 }
 
 @keyframes cameraRise {
-  from { opacity: 0; transform: translateY(80%) scale(0.85); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; transform: translateX(-45%) scale(0.85); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
 }
 
 @keyframes shutterPulse {
@@ -1319,8 +1341,8 @@ ul, ol { list-style: none; }
 }
 
 @keyframes photoEject {
-  0%, 18% { transform: translateY(45%); opacity: 0; }
-  100% { transform: translateY(-83%); opacity: 1; }
+  0%, 18% { transform: translateX(40%) rotate(7deg) scale(0.82); opacity: 0; }
+  100% { transform: translateX(0) rotate(2deg) scale(1); opacity: 1; }
 }
 
 @keyframes cameraFlash {
@@ -1359,96 +1381,74 @@ ul, ol { list-style: none; }
 }
 
 /* ============================================================
-   FLIP CARD
+   INVITE + SCRATCH (combined viewport)
    ============================================================ */
-.section--invitation { text-align: center; }
+.section--invite-reveal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: none;
+  padding: clamp(1rem, 3vh, 2rem) 1rem clamp(1.25rem, 4vh, 2.5rem);
+  text-align: center;
+}
 
-.flip-card {
-  width: min(360px, 90vw);
-  height: 280px;
-  margin: 0 auto;
-  perspective: 1200px;
-  cursor: pointer;
-  outline: none;
-}
-.flip-card:focus-visible {
-  outline: 3px solid var(--champagne);
-  outline-offset: 6px;
-  border-radius: var(--radius);
-}
-.flip-card__inner {
-  position: relative;
-  width: 100%; height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.flip-card.is-flipped .flip-card__inner {
-  transform: rotateY(180deg);
-}
-.flip-card__face {
-  position: absolute;
-  inset: 0;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  border-radius: var(--radius-lg);
+.invite-reveal__stack {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  gap: clamp(0.85rem, 2.5vh, 1.5rem);
+  width: min(420px, 100%);
+}
+
+.section__title--compact {
+  margin-bottom: 0.65rem;
+  font-size: clamp(1.55rem, 5vw, 2.1rem);
+}
+
+.section__title-icon {
+  display: inline-block;
+  margin-right: 0.25em;
+  font-size: 0.72em;
+  animation: pulseBloom 2.5s ease-in-out infinite;
+}
+
+.invite-card {
+  width: min(360px, 90vw);
+  margin: 0 auto;
+  padding: 1.35rem 1.5rem 1.45rem;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(145deg, var(--soft-peach), var(--dusty-pink));
+  border: 2px solid var(--rose-gold);
   box-shadow: var(--shadow-lg);
 }
-.flip-card__face--front {
-  background:
-    linear-gradient(145deg, var(--ivory), var(--warm-beige));
-  border: 2px solid var(--champagne-light);
-}
-.flip-card__face--back {
-  background:
-    linear-gradient(145deg, var(--soft-peach), var(--dusty-pink));
-  border: 2px solid var(--rose-gold);
-  transform: rotateY(180deg);
-}
-.flip-card__ornament {
-  font-size: 1.5rem;
-  color: var(--champagne);
-  margin-bottom: 1rem;
-}
-.flip-card__prompt {
-  font-family: var(--font-display);
+
+.invite-card__ornament {
+  display: block;
   font-size: 1.35rem;
-  color: var(--text);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  filter: drop-shadow(0 2px 4px rgba(104, 38, 51, 0.15));
 }
-.flip-card__message {
+
+.invite-card__message {
   font-family: var(--font-serif);
-  font-size: 1.2rem;
+  font-size: clamp(1.05rem, 3.4vw, 1.2rem);
   font-style: italic;
   color: var(--text);
-  line-height: 1.6;
-  margin-bottom: 1rem;
-}
-.flip-card__from {
-  font-family: var(--font-script);
-  font-size: 1.5rem;
-  color: var(--rose-gold);
+  line-height: 1.55;
+  margin: 0;
 }
 
-/* ============================================================
-   SCRATCH CARD
-   ============================================================ */
-.section--scratch { text-align: center; }
-
-.scratch-wrap {
+.section--invite-reveal .scratch-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.scratch-card {
+.section--invite-reveal .scratch-card {
   position: relative;
-  width: min(340px, 90vw);
-  height: 200px;
+  width: min(320px, 86vw);
+  height: min(230px, 32vh);
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow-lg);
@@ -1485,6 +1485,26 @@ ul, ol { list-style: none; }
   font-size: 1rem;
   color: var(--emerald);
   margin-top: 0.25rem;
+}
+.scratch-card__divider {
+  width: 48px;
+  height: 1px;
+  margin: 0.8rem 0 0.65rem;
+  background: linear-gradient(90deg, transparent, var(--champagne), transparent);
+}
+.scratch-card__venue {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--emerald);
+}
+.scratch-card__address {
+  max-width: 27ch;
+  margin-top: 0.25rem;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--text-muted);
 }
 .scratch-card__canvas {
   position: absolute;
@@ -1739,6 +1759,33 @@ ul, ol { list-style: none; }
   max-width: var(--max-width);
   margin: 0 auto;
 }
+.footer__family {
+  position: relative;
+  width: min(760px, 100%);
+  margin: 0 auto 2.5rem;
+  padding: clamp(6px, 1.4vw, 12px);
+  overflow: hidden;
+  border-radius: clamp(18px, 3vw, 28px);
+  background: linear-gradient(145deg, rgba(255,255,255,.92), rgba(232,213,163,.48));
+  border: 1px solid rgba(201, 169, 110, 0.55);
+  box-shadow: var(--shadow-lg);
+}
+.footer__family::after {
+  content: "";
+  position: absolute;
+  inset: clamp(6px, 1.4vw, 12px);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: clamp(12px, 2vw, 20px);
+  pointer-events: none;
+}
+.footer__family img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: center 45%;
+  border-radius: clamp(12px, 2vw, 20px);
+}
 .footer__text {
   font-family: var(--font-serif);
   font-size: 1.15rem;
@@ -1836,8 +1883,7 @@ ul, ol { list-style: none; }
 
 /* High contrast support */
 @media (prefers-contrast: more) {
-  .details-card,
-  .flip-card__face,
+  .invite-card,
   .countdown__unit,
   .timeline__card {
     border-width: 2px;

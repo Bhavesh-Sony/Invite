@@ -38,7 +38,7 @@
 
   <!-- ========== MUSIC PLAYER ========== -->
   <div class="music-player" id="music-player">
-    <audio id="bg-audio" loop preload="metadata" muted></audio>
+    <audio id="bg-audio" autoplay loop preload="auto"></audio>
     <button type="button" class="music-player__btn" id="music-toggle" aria-label="Play background music" aria-pressed="false">
       <span class="music-player__icon" aria-hidden="true">♪</span>
     </button>
@@ -48,28 +48,27 @@
 
   <main id="main">
     <!-- ========== LANDING / HERO ========== -->
-    <section id="landing" class="section section--hero" aria-labelledby="hero-title">
-      <div class="hero__ornament" aria-hidden="true">✦</div>
-      <h1 id="hero-title" class="hero__title" data-animate="fade">
-        <span class="hero__ring" aria-hidden="true">💍</span>
-        Engagement Invitation
-      </h1>
-      <div class="hero__names" data-animate="zoom">
+    <section id="landing" class="section section--hero stage" aria-labelledby="hero-title">
+      <div class="hero__monogram" data-animate="zoom">
+        <span class="hero__monogram-ring" aria-hidden="true"></span>
+        <img id="hero-monogram" alt="Bhavisha and Bhavesh monogram" />
+      </div>
+      <h1 id="hero-title" class="hero__names" data-animate="zoom">
         <span class="hero__name" id="hero-bride-name">Bhavisha</span>
         <span class="hero__ampersand">&amp;</span>
         <span class="hero__name" id="hero-groom-name">Bhavesh</span>
-      </div>
-      <p class="hero__eyebrow" data-animate="fade">Together with their families</p>
+      </h1>
+      <p class="hero__eyebrow" data-animate="fade">TOGETHER WITH THEIR FAMILIES</p>
       <p class="hero__subtitle" data-animate="slide">
-        Joyfully invite you to celebrate the beginning of their forever
+        Joyfully invite you to celebrate the beginning of the first step of their forever
       </p>
-      <a href="#story" class="scroll-cue" aria-label="Scroll to the story">
+      <a href="#story" class="scroll-cue" id="scroll-cue" aria-label="Continue to the story">
         <span class="scroll-cue__chevron" aria-hidden="true"></span>
       </a>
     </section>
 
     <!-- ========== CHILDHOOD SAVE-THE-DATE REEL ========== -->
-    <section id="story" class="section section--story" aria-labelledby="story-heading">
+    <section id="story" class="section section--story stage" aria-labelledby="story-heading">
       <h2 id="story-heading" class="visually-hidden">Bhavisha and Bhavesh save-the-date story</h2>
       <div class="reel-controls">
         <button type="button" class="reel-control" id="story-replay" aria-label="Replay animation">Replay</button>
@@ -83,43 +82,13 @@
         <div class="reel-scene reel-scene--bride" id="scene-bride" aria-hidden="true">
           <div class="reel-ornaments" aria-hidden="true"><span>✦</span><span>❋</span><span>✦</span></div>
           <div class="reel-person reel-person--bride">
-            <svg class="reel-person__body" viewBox="0 0 260 380" aria-hidden="true">
-              <defs>
-                <linearGradient id="brideSilk" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0" stop-color="#9f274f"/><stop offset=".48" stop-color="#c8466d"/><stop offset="1" stop-color="#741b3d"/>
-                </linearGradient>
-                <linearGradient id="brideDupatta" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="#f3b7a5" stop-opacity=".88"/><stop offset="1" stop-color="#c55270" stop-opacity=".7"/>
-                </linearGradient>
-              </defs>
-              <path d="M53 96 Q34 145 48 227 L24 344 Q128 374 236 344 L211 227 Q228 145 207 96 Q164 48 130 49 Q94 45 53 96Z" fill="#452336"/>
-              <path d="M70 139 Q130 111 190 139 L181 188 Q130 205 79 188Z" fill="url(#brideSilk)" stroke="#d9ae62" stroke-width="5"/>
-              <path d="M70 183 Q130 201 190 183 L225 346 Q130 375 35 346Z" fill="url(#brideSilk)" stroke="#d9ae62" stroke-width="5"/>
-              <path d="M61 146 Q92 194 72 334" fill="none" stroke="url(#brideDupatta)" stroke-width="24" stroke-linecap="round"/>
-              <path d="M72 191 Q130 213 188 191" fill="none" stroke="#f0cf83" stroke-width="8"/>
-              <path d="M39 338 Q130 367 221 338" fill="none" stroke="#f0cf83" stroke-width="12"/>
-              <path d="M48 324 Q130 350 212 324" fill="none" stroke="#d99f45" stroke-width="3"/>
-              <g fill="none" stroke="#f0cf83" stroke-width="3" opacity=".95">
-                <path d="M81 229 q12-18 24 0 q-12 18-24 0Z"/><path d="M139 229 q12-18 24 0 q-12 18-24 0Z"/>
-                <path d="M105 277 q12-18 24 0 q-12 18-24 0Z"/><path d="M164 286 q12-18 24 0 q-12 18-24 0Z"/>
-                <path d="M60 291 q12-18 24 0 q-12 18-24 0Z"/>
-              </g>
-              <g fill="#f5d78d">
-                <circle cx="93" cy="229" r="3"/><circle cx="151" cy="229" r="3"/><circle cx="117" cy="277" r="3"/>
-                <circle cx="176" cy="286" r="3"/><circle cx="72" cy="291" r="3"/>
-              </g>
-              <path d="M66 125 Q40 165 50 238" fill="none" stroke="#f3d5bd" stroke-width="24" stroke-linecap="round"/>
-              <path d="M194 125 Q220 165 210 238" fill="none" stroke="#f3d5bd" stroke-width="24" stroke-linecap="round"/>
-              <path d="M48 230 Q55 249 74 238" fill="#f3d5bd" stroke="#4a2835" stroke-width="3"/>
-              <path d="M212 230 Q205 249 186 238" fill="#f3d5bd" stroke="#4a2835" stroke-width="3"/>
-              <circle cx="54" cy="225" r="5" fill="#d9ae62"/><circle cx="206" cy="225" r="5" fill="#d9ae62"/>
-            </svg>
-            <div class="reel-person__frame">
-              <img class="reel-person__photo" data-person-photo="bride" alt="Bhavisha as a child" />
-              <span class="reel-person__fallback" data-person-fallback="bride">B</span>
+            <div class="reel-person__shell">
+              <img class="reel-person__outfit" data-reel-outfit="bride" alt="" aria-hidden="true" />
+              <div class="reel-person__frame">
+                <img class="reel-person__photo" data-person-photo="bride" alt="Bhavisha as a child" />
+                <span class="reel-person__fallback" data-person-fallback="bride">B</span>
+              </div>
             </div>
-            <span class="reel-person__hand reel-person__hand--left" aria-hidden="true"></span>
-            <span class="reel-person__hand reel-person__hand--right" aria-hidden="true"></span>
             <span class="reel-person__scribble" aria-hidden="true">///</span>
           </div>
           <div class="reel-copy">
@@ -137,36 +106,13 @@
         <div class="reel-scene reel-scene--groom" id="scene-groom" aria-hidden="true">
           <div class="reel-ornaments" aria-hidden="true"><span>✦</span><span>❋</span><span>✦</span></div>
           <div class="reel-person reel-person--groom">
-            <svg class="reel-person__body" viewBox="0 0 260 380" aria-hidden="true">
-              <defs>
-                <linearGradient id="groomSilk" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0" stop-color="#285d4d"/><stop offset=".55" stop-color="#174538"/><stop offset="1" stop-color="#0d2f29"/>
-                </linearGradient>
-                <linearGradient id="groomStole" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="#e5c47e"/><stop offset="1" stop-color="#b98438"/>
-                </linearGradient>
-              </defs>
-              <path d="M43 121 Q130 67 217 121 L224 350 Q130 373 36 350Z" fill="url(#groomSilk)" stroke="#d3ad62" stroke-width="5"/>
-              <path d="M72 113 Q130 88 188 113 L174 139 Q130 151 86 139Z" fill="#f2e7ce" stroke="#d3ad62" stroke-width="4"/>
-              <path d="M130 107 L130 350" stroke="#d3ad62" stroke-width="4"/>
-              <path d="M92 118 Q111 155 101 339" fill="none" stroke="url(#groomStole)" stroke-width="19" stroke-linecap="round"/>
-              <path d="M34 348 Q130 372 226 348" fill="none" stroke="#d3ad62" stroke-width="8"/>
-              <g fill="none" stroke="#d3ad62" stroke-width="2.5">
-                <path d="M156 166 q10-14 20 0 q-10 14-20 0Z"/><path d="M158 226 q10-14 20 0 q-10 14-20 0Z"/>
-                <path d="M151 286 q10-14 20 0 q-10 14-20 0Z"/><path d="M61 210 q9-13 18 0 q-9 13-18 0Z"/>
-              </g>
-              <g fill="#efd58f"><circle cx="143" cy="157" r="4"/><circle cx="143" cy="201" r="4"/><circle cx="143" cy="245" r="4"/><circle cx="143" cy="289" r="4"/></g>
-              <path d="M54 136 Q25 182 47 250" fill="none" stroke="#174538" stroke-width="38" stroke-linecap="round"/>
-              <path d="M206 136 Q235 182 213 250" fill="none" stroke="#174538" stroke-width="38" stroke-linecap="round"/>
-              <path d="M46 230 Q54 252 76 238" fill="#f3d5bd" stroke="#4a2835" stroke-width="3"/>
-              <path d="M214 230 Q206 252 184 238" fill="#f3d5bd" stroke="#4a2835" stroke-width="3"/>
-            </svg>
-            <div class="reel-person__frame">
-              <img class="reel-person__photo" data-person-photo="groom" alt="Bhavesh as a child" />
-              <span class="reel-person__fallback" data-person-fallback="groom">B</span>
+            <div class="reel-person__shell">
+              <img class="reel-person__outfit" data-reel-outfit="groom" alt="" aria-hidden="true" />
+              <div class="reel-person__frame">
+                <img class="reel-person__photo" data-person-photo="groom" alt="Bhavesh as a child" />
+                <span class="reel-person__fallback" data-person-fallback="groom">B</span>
+              </div>
             </div>
-            <span class="reel-person__hand reel-person__hand--left" aria-hidden="true"></span>
-            <span class="reel-person__hand reel-person__hand--right" aria-hidden="true"></span>
             <span class="reel-person__scribble" aria-hidden="true">///</span>
           </div>
           <div class="reel-copy">
@@ -179,14 +125,10 @@
         <div class="reel-scene reel-scene--camera" id="scene-camera" aria-hidden="true">
           <div class="instant-photo">
             <div class="instant-photo__image">
-              <img id="reel-collage-photo" alt="Bhavisha and Bhavesh childhood collage" />
+              <img id="reel-collage-photo" alt="Bhavisha and Bhavesh holding hands as children" />
             </div>
           </div>
-          <div class="instant-camera" aria-hidden="true">
-            <span class="instant-camera__flash"></span>
-            <span class="instant-camera__button"></span>
-            <span class="instant-camera__lens"><i></i></span>
-          </div>
+          <img class="instant-camera-img" id="reel-camera-img" alt="" aria-hidden="true" />
         </div>
 
         <!-- Final save-the-date poster -->
@@ -194,67 +136,58 @@
           <div class="reel-ornaments reel-ornaments--poster" aria-hidden="true"><span>✦</span><span>❋</span><span>✦</span></div>
           <div class="poster__couple">
             <div class="poster-person poster-person--bride">
-              <svg class="poster-person__outfit" viewBox="0 0 160 230" aria-hidden="true">
-                <defs><linearGradient id="posterBrideSilk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ac3157"/><stop offset=".55" stop-color="#d25775"/><stop offset="1" stop-color="#741b3d"/></linearGradient></defs>
-                <path d="M39 54 Q80 31 121 54 L145 219 Q80 237 15 219Z" fill="url(#posterBrideSilk)" stroke="#d9ae62" stroke-width="4"/>
-                <path d="M34 88 Q80 105 126 88" fill="none" stroke="#f2d18a" stroke-width="6"/>
-                <path d="M20 211 Q80 228 140 211" fill="none" stroke="#f2d18a" stroke-width="9"/>
-                <g fill="#f2d18a"><circle cx="50" cy="130" r="3"/><circle cx="82" cy="151" r="3"/><circle cx="111" cy="125" r="3"/><circle cx="48" cy="185" r="3"/><circle cx="112" cy="188" r="3"/></g>
-                <path d="M39 58 Q22 95 30 142" fill="none" stroke="#f3d5bd" stroke-width="16" stroke-linecap="round"/>
-                <path d="M121 58 Q138 95 130 142" fill="none" stroke="#f3d5bd" stroke-width="16" stroke-linecap="round"/>
-              </svg>
-              <img data-person-photo="bride" alt="" />
+              <div class="poster-person__shell">
+                <img class="poster-person__outfit" data-reel-outfit="bride" alt="" aria-hidden="true" />
+                <div class="poster-person__frame">
+                  <img data-person-photo="bride" alt="" />
+                </div>
+              </div>
             </div>
             <span class="poster__heart" aria-hidden="true">♥</span>
             <div class="poster-person poster-person--groom">
-              <svg class="poster-person__outfit" viewBox="0 0 160 230" aria-hidden="true">
-                <defs><linearGradient id="posterGroomSilk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#285d4d"/><stop offset=".55" stop-color="#174538"/><stop offset="1" stop-color="#0d2f29"/></linearGradient></defs>
-                <path d="M24 57 Q80 26 136 57 L143 220 Q80 235 17 220Z" fill="url(#posterGroomSilk)" stroke="#d3ad62" stroke-width="4"/>
-                <path d="M80 48 L80 221" stroke="#d3ad62" stroke-width="3"/>
-                <path d="M53 54 Q67 87 60 216" fill="none" stroke="#d3ad62" stroke-width="12"/>
-                <g fill="#efd58f"><circle cx="89" cy="88" r="3"/><circle cx="89" cy="121" r="3"/><circle cx="89" cy="154" r="3"/><circle cx="89" cy="187" r="3"/></g>
-                <path d="M27 68 Q8 108 24 151" fill="none" stroke="#174538" stroke-width="24" stroke-linecap="round"/>
-                <path d="M133 68 Q152 108 136 151" fill="none" stroke="#174538" stroke-width="24" stroke-linecap="round"/>
-              </svg>
-              <img data-person-photo="groom" alt="" />
+              <div class="poster-person__shell">
+                <img class="poster-person__outfit" data-reel-outfit="groom" alt="" aria-hidden="true" />
+                <div class="poster-person__frame">
+                  <img data-person-photo="groom" alt="" />
+                </div>
+              </div>
             </div>
           </div>
           <p class="poster__invite">Join us for the engagement celebration of</p>
           <p class="poster__names" id="poster-names"></p>
-          <button type="button" class="poster__replay" id="poster-replay">Watch again</button>
         </div>
       </div>
     </section>
 
-    <!-- ========== INVITATION REVEAL ========== -->
-    <section id="invitation" class="section section--invitation" aria-labelledby="invite-heading">
-      <h2 id="invite-heading" class="section__title" data-animate="fade">Your Invitation</h2>
-      <div class="flip-card" id="flip-card" tabindex="0" role="button" aria-label="Tap to reveal your invitation" aria-pressed="false">
-        <div class="flip-card__inner" id="flip-card-inner">
-          <div class="flip-card__face flip-card__face--front">
-            <span class="flip-card__ornament" aria-hidden="true">✦</span>
-            <p class="flip-card__prompt">Tap to Reveal Your Invitation</p>
-          </div>
-          <div class="flip-card__face flip-card__face--back">
-            <span class="flip-card__ornament" aria-hidden="true">💍</span>
-            <p class="flip-card__message" id="invite-message"></p>
-            <p class="flip-card__from" id="invite-from"></p>
-          </div>
+    <!-- ========== INVITATION + SCRATCH (one viewport) ========== -->
+    <section id="invite-reveal" class="section section--invite-reveal stage" aria-labelledby="invite-heading">
+      <div class="invite-reveal__stack">
+        <div class="invite-static" id="invitation">
+          <h2 id="invite-heading" class="section__title section__title--compact" data-animate="fade">
+            <span class="section__title-icon" aria-hidden="true">💍</span>
+            Engagement Invitation
+          </h2>
+          <article class="invite-card" data-animate="zoom" aria-label="Engagement invitation message">
+            <span class="invite-card__ornament" aria-hidden="true">💍</span>
+            <p class="invite-card__message" id="invite-message"></p>
+          </article>
         </div>
-      </div>
-    </section>
 
-    <!-- ========== SCRATCH CARD ========== -->
-    <section id="scratch-section" class="section section--scratch" aria-labelledby="scratch-heading">
-      <h2 id="scratch-heading" class="section__title" data-animate="fade">Scratch to Reveal the Engagement Date</h2>
-      <div class="scratch-wrap" data-animate="zoom">
-        <div class="scratch-card" id="scratch-card">
-          <div class="scratch-card__reveal" id="scratch-reveal">
-            <p class="scratch-card__label">Engagement Date</p>
-            <p class="scratch-card__date" id="scratch-date"></p>
-            <p class="scratch-card__time" id="scratch-time"></p>
+        <div class="scratch-block" id="scratch-section">
+          <h2 id="scratch-heading" class="section__title section__title--compact" data-animate="fade">Scratch to Reveal</h2>
+          <div class="scratch-wrap" data-animate="zoom">
+            <div class="scratch-card" id="scratch-card">
+              <div class="scratch-card__reveal" id="scratch-reveal">
+                <p class="scratch-card__label">Our Engagement</p>
+                <p class="scratch-card__date" id="scratch-date"></p>
+                <p class="scratch-card__time" id="scratch-time"></p>
+                <span class="scratch-card__divider" aria-hidden="true"></span>
+                <p class="scratch-card__venue" id="scratch-venue"></p>
+                <p class="scratch-card__address" id="scratch-address"></p>
+              </div>
+              <canvas id="scratch-canvas" class="scratch-card__canvas" aria-label="Scratch card surface"></canvas>
+            </div>
           </div>
-          <canvas id="scratch-canvas" class="scratch-card__canvas" aria-label="Scratch card surface"></canvas>
         </div>
       </div>
       <div class="celebration" id="celebration" aria-hidden="true"></div>
@@ -262,7 +195,7 @@
 
     <!-- ========== COUNTDOWN ========== -->
     <section id="countdown" class="section section--countdown" aria-labelledby="countdown-heading">
-      <h2 id="countdown-heading" class="section__title" data-animate="fade">Counting down to first step of forever</h2>
+      <h2 id="countdown-heading" class="section__title" data-animate="fade">Count Down</h2>
       <div class="countdown" id="countdown-grid" data-animate="slide" role="timer" aria-live="polite">
         <div class="countdown__unit">
           <span class="countdown__value" id="cd-days">00</span>
@@ -284,35 +217,6 @@
       <p class="countdown__done" id="countdown-done" hidden>It's Celebration Time!</p>
     </section>
 
-    <!-- ========== EVENT DETAILS ========== -->
-    <section id="details" class="section section--details" aria-labelledby="details-heading">
-      <h2 id="details-heading" class="section__title" data-animate="fade">Event Details</h2>
-      <div class="details-card" data-animate="zoom">
-        <div class="details-card__row">
-          <span class="details-card__icon" aria-hidden="true">📅</span>
-          <div>
-            <p class="details-card__label">Date</p>
-            <p class="details-card__value" id="detail-date"></p>
-          </div>
-        </div>
-        <div class="details-card__row">
-          <span class="details-card__icon" aria-hidden="true">🕒</span>
-          <div>
-            <p class="details-card__label">Time</p>
-            <p class="details-card__value" id="detail-time"></p>
-          </div>
-        </div>
-        <div class="details-card__row">
-          <span class="details-card__icon" aria-hidden="true">📍</span>
-          <div>
-            <p class="details-card__label">Venue</p>
-            <p class="details-card__value" id="detail-venue"></p>
-            <p class="details-card__address" id="detail-address"></p>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- ========== TIMELINE ========== -->
     <section id="timeline" class="section section--timeline" aria-labelledby="timeline-heading">
       <h2 id="timeline-heading" class="section__title" data-animate="fade">Our Journey</h2>
@@ -321,7 +225,7 @@
 
     <!-- ========== MAPS ========== -->
     <section id="maps" class="section section--maps" aria-labelledby="maps-heading">
-      <h2 id="maps-heading" class="section__title" data-animate="fade">Find Us</h2>
+      <h2 id="maps-heading" class="section__title" data-animate="fade">Come celebrate with us</h2>
       <div class="maps-wrap" data-animate="fade">
         <div class="maps-embed" id="map-embed"></div>
         <a class="btn btn--primary" id="maps-link" href="#" target="_blank" rel="noopener noreferrer">
@@ -332,9 +236,12 @@
 
     <!-- ========== FOOTER ========== -->
     <footer class="footer" role="contentinfo">
+      <figure class="footer__family" data-animate="fade">
+        <img id="family-photo" alt="Bhavisha and Bhavesh with their families" loading="lazy" />
+      </figure>
       <p class="footer__text">
         With love,<br />
-        <span id="footer-names">Bhavisha &amp; Bhavesh</span>
+        <span id="footer-names">Rajani's &amp; Sony's</span>
       </p>
       <p class="footer__ornament" aria-hidden="true">✦ · ✦ · ✦</p>
     </footer>

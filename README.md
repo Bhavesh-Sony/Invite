@@ -26,7 +26,7 @@ const INVITATION = {
   bride: {
     name: "Bhavisha",
     title: "Ghar ki Badi Beti",
-    tagline: "Classy, Responsible & Drama Queen",
+    tagline: "Classy, Responsible & Family ki Unofficial Manager",
     childhoodPhoto: "picss/Bhavisha_cropped_2.PNG",
     photoPosition: "50% 50%",
   },
@@ -41,8 +41,14 @@ const INVITATION = {
     mapsLink: "https://maps.app.goo.gl/...",
   },
   invitationMessage: "We would be honoured...",
+  monogram: "picss/monogram.png",
+  familyPhoto: "picss/family_photo.jpeg",
+  footerSignature: "Rajani's & Sony's",
   reel: {
-    collagePhoto: "picss/collage.png",
+    collagePhoto: "picss/kids_holding_hands.png",
+    brideOutfit: "picss/reel/bride-outfit.png",
+    groomOutfit: "picss/reel/groom-outfit.png",
+    cameraPhoto: "picss/reel/camera.png",
     timings: { bride: 6800, meets: 1700, groom: 5300, camera: 4000 },
   },
   timeline: [ { icon, title, text }, ... ],
@@ -60,13 +66,15 @@ const INVITATION = {
 | Field | Effect |
 |--------|--------|
 | `bride` / `groom` | Names, titles, taglines, childhood photos on animated characters |
-| `event.date` / `time` / `venue` / `address` | Event details card & scratch reveal text |
+| `event.date` / `time` / `venue` / `address` | Scratch reveal content |
 | `event.dateISO` | Live countdown target |
 | `event.mapsEmbedSrc` | Google Maps iframe `src` only (https) |
 | `event.mapsLink` | “Navigate to Venue” button URL |
-| `invitationMessage` | Text inside the 3D flip card |
+| `invitationMessage` | Text on the static invitation card |
+| `monogram` / `familyPhoto` / `footerSignature` | Opening monogram and family footer |
 | `photoPosition` | Horizontal/vertical focus for the childhood-photo crop |
-| `reel.collagePhoto` | Childhood collage ejected by the instant camera |
+| `reel.collagePhoto` | Childhood photo ejected by the instant camera |
+| `reel.brideOutfit` / `groomOutfit` / `cameraPhoto` | Frame crops from Video-969 for the reel |
 | `reel.timings` | Duration in milliseconds for each animated reel scene |
 | `timeline` | Journey milestone cards |
 | `music` | Background piano audio file |
@@ -75,25 +83,34 @@ const INVITATION = {
 
 ## Childhood photos on characters
 
-Each childhood photo is placed inside a gold square frame held by an original SVG illustrated character:
+Each childhood photo is composited into the cream cutout of the video-frame outfit sprites in `picss/reel/`:
 
-- Photo uses a non-destructive square crop controlled by `photoPosition`
-- If the image fails to load, a monogram avatar (first letter of the name) is shown
+- Photo crop is controlled by `photoPosition`
+- If the image fails to load, a letter fallback is shown
 
 Swap photos by changing `childhoodPhoto` paths. Adjust `photoPosition` (for example, `"50% 20%"`) until the face and hairstyle are centered in the frame.
+
+---
+
+## Guest journey
+
+1. Hero monogram + names animate in on load  
+2. Down arrow scrolls to the reel and plays it  
+3. After the reel, scrolls to Engagement Invitation + Scratch (one viewport)  
+4. Then smoothly auto-scrolls Countdown → Timeline → Maps → Footer  
 
 ---
 
 ## Features
 
 - Elegant loading screen (rings, floral cue, progress %)
-- 9:16 childhood save-the-date reel with bride, “Meets”, groom, instant-camera, and final-poster scenes
+- 9:16 childhood save-the-date reel using exact outfits from Video-969 frames
+- Staged scroll journey driven by the down arrow and reel completion
 - Replay and Skip controls
-- Soft background music (muted until the visitor presses play)
-- 3D flip invitation card
-- Canvas scratch card to reveal the date (mouse + touch + keyboard fallback)
+- Automatic background music with first-interaction fallback for restrictive browsers
+- Static invitation card (message only)
+- Canvas scratch card to reveal the date, time, and venue
 - Live countdown
-- Event details
 - Scroll timeline
 - Embedded Google Maps + navigate button
 - Floating decorations & scroll animations

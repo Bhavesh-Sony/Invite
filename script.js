@@ -9,19 +9,19 @@ const INVITATION = {
   bride: {
     name: "Bhavisha",
     title: "Ghar ki Badi Beti",
-    tagline: "Classy, Responsible & Drama Queen",
-    childhoodPhoto: "picss/Bhavisha_cropped_2.PNG",
-    /** Horizontal and vertical focus inside the square reel frame. */
-    photoPosition: "50% 50%",
+    tagline: "Classy, Responsible & Family ki Unofficial Manager",
+    childhoodPhoto: "picss/bhavisha_new.png",
+    /** Face high so chin/neck meet the blouse; eyes near upper third. */
+    photoPosition: "50% 45%",
   },
 
   groom: {
     name: "Bhavesh",
     title: "Ghar ka Chota Beta",
-    tagline: "Calm, Funny & Sabka Favourite",
-    childhoodPhoto: "picss/bhavesh_cropped.JPG",
-    /** Places his eyes on the same horizontal line as Bhavisha's. */
-    photoPosition: "50% 65%",
+    tagline: "Calm, Funny & Everyone's Favorite",
+    childhoodPhoto: "picss/bhavesh_new.png",
+    /** Match eye line with Bhavisha in outfit frames. */
+    photoPosition: "50% 45%",
   },
 
   event: {
@@ -39,8 +39,15 @@ const INVITATION = {
   invitationMessage:
     "We would be honoured to celebrate this beautiful beginning with your presence.",
 
+  monogram: "picss/monogram.png",
+  familyPhoto: "picss/family_photo.jpeg",
+  footerSignature: "Rajani's & Sony's",
+
   reel: {
-    collagePhoto: "picss/collage.png",
+    collagePhoto: "picss/kids_holding_hands.png",
+    brideOutfit: "picss/bhavisha_new.png",
+    groomOutfit: "picss/bhavesh_new.png",
+    cameraPhoto: "picss/reel/camera-cropped.png",
     timings: {
       bride: 6800,
       meets: 1700,
@@ -52,7 +59,7 @@ const INVITATION = {
   timeline: [
     {
       icon: "🌸",
-      title: "Once Upon a Time",
+      title: "Destiny Was Waiting",
       text: "Two souls filled with laughter, dreams, and a sparkle of destiny.",
     },
     {
@@ -100,31 +107,36 @@ function initFromConfig() {
   const heroGroom = $("#hero-groom-name");
   if (heroBride) heroBride.textContent = bride.name;
   if (heroGroom) heroGroom.textContent = groom.name;
+  const monogram = $("#hero-monogram");
+  if (monogram) monogram.src = INVITATION.monogram;
 
-  // Childhood reel photos and copy
+  // Childhood reel photos, outfits, and copy
   setReelPhotos("bride", bride);
   setReelPhotos("groom", groom);
+  $$(`[data-reel-outfit="bride"]`).forEach((img) => {
+    img.src = INVITATION.reel.brideOutfit;
+  });
+  $$(`[data-reel-outfit="groom"]`).forEach((img) => {
+    img.src = INVITATION.reel.groomOutfit;
+  });
   const collagePhoto = $("#reel-collage-photo");
   if (collagePhoto) collagePhoto.src = INVITATION.reel.collagePhoto;
+  const cameraImg = $("#reel-camera-img");
+  if (cameraImg) cameraImg.src = INVITATION.reel.cameraPhoto;
   $("#reel-bride-title").textContent = bride.title;
   $("#reel-bride-tagline").textContent = bride.tagline;
   $("#reel-groom-title").textContent = groom.title;
   $("#reel-groom-tagline").textContent = groom.tagline;
   $("#poster-names").textContent = `${bride.name} & ${groom.name}`;
 
-  // Invitation card
+  // Invitation card (static — no names on the card)
   $("#invite-message").textContent = INVITATION.invitationMessage;
-  $("#invite-from").textContent = `${bride.name} & ${groom.name}`;
 
   // Scratch reveal
   $("#scratch-date").textContent = event.date;
   $("#scratch-time").textContent = event.time;
-
-  // Event details
-  $("#detail-date").textContent = event.date;
-  $("#detail-time").textContent = event.time;
-  $("#detail-venue").textContent = event.venue;
-  $("#detail-address").textContent = event.address;
+  $("#scratch-venue").textContent = event.venue;
+  $("#scratch-address").textContent = event.address;
 
   // Maps — whitelist https google maps embed only
   const mapWrap = $("#map-embed");
@@ -145,8 +157,10 @@ function initFromConfig() {
   // Footer
   const footerNames = $("#footer-names");
   if (footerNames) {
-    footerNames.textContent = `${bride.name} & ${groom.name}`;
+    footerNames.textContent = INVITATION.footerSignature;
   }
+  const familyPhoto = $("#family-photo");
+  if (familyPhoto) familyPhoto.src = INVITATION.familyPhoto;
 
   // Audio
   const audio = $("#bg-audio");
@@ -247,6 +261,10 @@ const Loader = {
       INVITATION.bride.childhoodPhoto,
       INVITATION.groom.childhoodPhoto,
       INVITATION.reel.collagePhoto,
+      INVITATION.reel.brideOutfit,
+      INVITATION.reel.groomOutfit,
+      INVITATION.reel.cameraPhoto,
+      INVITATION.monogram,
     ];
     let loaded = 0;
     const total = urls.length + 1; // +1 for audio metadata attempt
@@ -360,49 +378,36 @@ const StoryController = {
   hasPlayed: false,
   runId: 0,
   scenes: [],
+  onComplete: null,
 
   init() {
     this.scenes = $$(".reel-scene");
     $("#story-skip")?.addEventListener("click", () => this.skip());
-    $("#story-replay")?.addEventListener("click", () => this.play());
-    $("#poster-replay")?.addEventListener("click", () => this.play());
+    $("#story-replay")?.addEventListener("click", () => {
+      JourneyController.cancelTail();
+      this.play({ advanceJourney: false });
+    });
 
     if (prefersReducedMotion()) {
       this.showPoster();
-      return;
     }
-
-    const story = $("#story");
-    if (!story) return;
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !this.hasPlayed) {
-            this.hasPlayed = true;
-            io.unobserve(story);
-            this.play();
-          }
-        });
-      },
-      { threshold: 0.35 }
-    );
-    io.observe(story);
   },
 
   skip() {
     this.runId++;
     this.running = false;
+    this.hasPlayed = true;
     this.showPoster();
+    this.notifyComplete();
   },
 
-  async play() {
+  async play({ advanceJourney = true } = {}) {
     const id = ++this.runId;
     const timings = INVITATION.reel.timings;
     this.running = true;
+    this.hasPlayed = true;
     this.setScene(null);
 
-    // The reference opens on textured paper before the bride rises in.
     await wait(650);
     if (id !== this.runId) return;
 
@@ -422,6 +427,7 @@ const StoryController = {
     if (id !== this.runId) return;
     this.showPoster();
     this.running = false;
+    if (advanceJourney) this.notifyComplete();
   },
 
   setScene(sceneId) {
@@ -433,7 +439,6 @@ const StoryController = {
 
     const scene = $(`#${sceneId}`);
     if (!scene) return;
-    // Force animation restart when the visitor replays the reel.
     void scene.offsetWidth;
     scene.classList.add("is-active");
     scene.setAttribute("aria-hidden", "false");
@@ -442,49 +447,166 @@ const StoryController = {
   showPoster() {
     this.setScene("scene-poster");
   },
+
+  notifyComplete() {
+    if (typeof this.onComplete === "function") this.onComplete();
+  },
 };
 
 /* ============================================================
-   FLIP CARD
+   AUTO SCROLL — slow, seamless, cancellable
    ============================================================ */
 
-const FlipCard = {
+const AutoScroll = {
+  token: 0,
+  raf: null,
+
+  cancel() {
+    this.token++;
+    if (this.raf) cancelAnimationFrame(this.raf);
+    this.raf = null;
+  },
+
+  /**
+   * Glide the page to targetY at a constant, readable pace.
+   * @param {number} targetY  Absolute scroll position.
+   * @param {number} speed    Pixels per millisecond (default ~90px/s).
+   */
+  to(targetY, speed = 0.09) {
+    this.cancel();
+    const myToken = this.token;
+    const maxY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    const goal = Math.min(Math.max(0, targetY), maxY);
+
+    return new Promise((resolve) => {
+      if (Math.abs(goal - window.scrollY) < 2) return resolve(true);
+      const dir = Math.sign(goal - window.scrollY);
+      let last = performance.now();
+
+      const step = (now) => {
+        if (myToken !== this.token) return resolve(false);
+        const dt = now - last;
+        last = now;
+        const next = window.scrollY + speed * dt * dir;
+        if ((dir > 0 && next >= goal) || (dir < 0 && next <= goal)) {
+          window.scrollTo(0, goal);
+          this.raf = null;
+          return resolve(true);
+        }
+        window.scrollTo(0, next);
+        this.raf = requestAnimationFrame(step);
+      };
+      this.raf = requestAnimationFrame(step);
+    });
+  },
+};
+
+/* ============================================================
+   JOURNEY CONTROLLER — staged scroll path
+   ============================================================ */
+
+const JourneyController = {
+  journeyId: 0,
+  started: false,
+  scratchResolve: null,
+  // Gentle reading pace (px/ms) for the seamless auto-scroll.
+  SLOW: 0.11,
+  // Brisker pace for the arrow tap that kicks off the reel.
+  QUICK: 0.5,
+
   init() {
-    const card = $("#flip-card");
-    if (!card) return;
+    const cue = $("#scroll-cue");
+    cue?.addEventListener("click", (e) => {
+      e.preventDefault();
+      this.beginFromHero();
+    });
 
-    const flip = () => {
-      if (card.classList.contains("is-flipped")) return;
-      card.classList.add("is-flipped");
-      card.setAttribute("aria-pressed", "true");
-      card.setAttribute("aria-label", "Invitation revealed");
-      this.sparkle(card);
-    };
+    // Let guests take over at any time — a manual gesture stops auto-scroll.
+    const takeOver = () => AutoScroll.cancel();
+    window.addEventListener("wheel", takeOver, { passive: true });
+    window.addEventListener("touchmove", takeOver, { passive: true });
 
-    card.addEventListener("click", flip);
-    card.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        flip();
-      }
+    StoryController.onComplete = () => this.afterReel();
+  },
+
+  cancelTail() {
+    this.journeyId++;
+    AutoScroll.cancel();
+  },
+
+  async beginFromHero() {
+    if (this.started && StoryController.running) return;
+    this.started = true;
+    this.cancelTail();
+    const id = this.journeyId;
+
+    await AutoScroll.to(this.topOf("#story"), this.QUICK);
+    if (id !== this.journeyId) return;
+
+    if (prefersReducedMotion()) {
+      StoryController.showPoster();
+      await wait(400);
+      await this.afterReel();
+      return;
+    }
+
+    await StoryController.play({ advanceJourney: true });
+  },
+
+  topOf(sel) {
+    const el = $(sel);
+    return el ? el.getBoundingClientRect().top + window.scrollY : 0;
+  },
+
+  revealWithin(sel) {
+    $$(`${sel} [data-animate]`).forEach((node) => node.classList.add("is-visible"));
+  },
+
+  async afterReel() {
+    const id = ++this.journeyId;
+    await wait(prefersReducedMotion() ? 150 : 900);
+    if (id !== this.journeyId) return;
+
+    // Reveal the invitation + scratch content as it comes into view.
+    this.revealWithin("#invite-reveal");
+
+    if (prefersReducedMotion()) {
+      $("#invite-reveal")?.scrollIntoView();
+      return;
+    }
+
+    // 1) Seamlessly glide down to the invitation + scratch stage.
+    await AutoScroll.to(this.topOf("#invite-reveal"), this.SLOW);
+    if (id !== this.journeyId) return;
+
+    // 2) Pause here until the guest reveals the engagement details.
+    await this.waitForScratch(id);
+    if (id !== this.journeyId) return;
+
+    // Let the reveal + celebration breathe before moving on.
+    await wait(1600);
+    if (id !== this.journeyId) return;
+
+    // 3) Resume the seamless scroll all the way to the footer.
+    const maxY = document.documentElement.scrollHeight - window.innerHeight;
+    await AutoScroll.to(maxY, this.SLOW);
+  },
+
+  waitForScratch(id) {
+    if (ScratchCard.revealed) return Promise.resolve();
+    return new Promise((resolve) => {
+      this.scratchResolve = () => {
+        if (id === this.journeyId) resolve();
+      };
     });
   },
 
-  sparkle(el) {
-    if (prefersReducedMotion()) return;
-    for (let i = 0; i < 8; i++) {
-      const s = document.createElement("span");
-      s.textContent = "✨";
-      s.style.cssText = `
-        position:absolute; pointer-events:none; font-size:1rem;
-        left:50%; top:50%; z-index:5;
-        animation: celebrateBurst 1.2s ease-out forwards;
-        --tx:${(Math.random() - 0.5) * 200}px;
-        --ty:${(Math.random() - 0.5) * 160}px;
-      `;
-      el.style.position = "relative";
-      el.appendChild(s);
-      setTimeout(() => s.remove(), 1300);
+  /** Called when the guest finishes scratching. */
+  onScratchRevealed() {
+    if (this.scratchResolve) {
+      const resolve = this.scratchResolve;
+      this.scratchResolve = null;
+      resolve();
     }
   },
 };
@@ -655,6 +777,7 @@ const ScratchCard = {
       if (this.canvas) this.canvas.style.pointerEvents = "none";
     }, 600);
     celebrate();
+    JourneyController.onScratchRevealed();
   },
 };
 
@@ -757,33 +880,60 @@ const MusicPlayer = {
     const volume = $("#music-volume");
     if (!audio || !toggle) return;
 
-    audio.muted = true;
+    this.audio = audio;
+    this.toggle = toggle;
+    audio.muted = false;
 
     toggle.addEventListener("click", async () => {
       try {
-        if (audio.paused || audio.muted) {
-          audio.muted = false;
-          await audio.play();
-          toggle.classList.add("is-playing");
-          toggle.setAttribute("aria-pressed", "true");
-          toggle.setAttribute("aria-label", "Pause background music");
+        if (audio.paused) {
+          await this.start();
         } else {
           audio.pause();
-          toggle.classList.remove("is-playing");
-          toggle.setAttribute("aria-pressed", "false");
-          toggle.setAttribute("aria-label", "Play background music");
+          this.setPlayingState(false);
         }
       } catch {
-        /* autoplay policies — user can retry */
+        /* The visitor can retry if playback is temporarily unavailable. */
       }
     });
 
     volume?.addEventListener("input", () => {
       audio.volume = parseFloat(volume.value);
-      if (audio.volume > 0 && audio.muted) {
-        audio.muted = false;
-      }
+      audio.muted = false;
     });
+
+    // Attempt audible autoplay. Browsers that block it will start the music
+    // on the visitor's first interaction anywhere on the invitation.
+    this.resumeOnGesture = (event) => {
+      if (event.target instanceof Element && event.target.closest("#music-toggle")) return;
+      this.start();
+    };
+    document.addEventListener("pointerdown", this.resumeOnGesture, true);
+    document.addEventListener("keydown", this.resumeOnGesture, true);
+    this.start();
+  },
+
+  async start() {
+    if (!this.audio) return;
+    try {
+      this.audio.muted = false;
+      await this.audio.play();
+      this.setPlayingState(true);
+      document.removeEventListener("pointerdown", this.resumeOnGesture, true);
+      document.removeEventListener("keydown", this.resumeOnGesture, true);
+    } catch {
+      this.setPlayingState(false);
+    }
+  },
+
+  setPlayingState(isPlaying) {
+    if (!this.toggle) return;
+    this.toggle.classList.toggle("is-playing", isPlaying);
+    this.toggle.setAttribute("aria-pressed", String(isPlaying));
+    this.toggle.setAttribute(
+      "aria-label",
+      isPlaying ? "Pause background music" : "Play background music"
+    );
   },
 };
 
@@ -795,16 +945,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   initFromConfig();
   Decorations.init();
   MusicPlayer.init();
-  FlipCard.init();
   ScratchCard.init();
   Countdown.init();
   StoryController.init();
+  JourneyController.init();
 
   await Loader.start();
+  MusicPlayer.start();
 
-  // Re-init scroll reveal after loader (hero already in view)
   ScrollReveal.init();
-  // Hero animations kick in once loader is gone
   $$("#landing [data-animate]").forEach((el, i) => {
     setTimeout(() => el.classList.add("is-visible"), prefersReducedMotion() ? 0 : 200 + i * 200);
   });
