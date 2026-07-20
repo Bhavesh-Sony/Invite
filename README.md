@@ -152,6 +152,31 @@ Invite/
 2. Framework preset: **Other**.
 3. Build command: leave empty. Output directory: `.`
 
+### AWS EC2 + Elastic IP (custom domain)
+
+Use this when you want the site on your own domain (for example `invite.yourdomain.com`) instead of GitHub Pages.
+
+1. **Create an EC2 instance** (Ubuntu 22.04+, `t3.micro` is enough).
+2. **Allocate an Elastic IP** in the AWS console: **EC2 → Network & Security → Elastic IPs → Allocate**, then **Associate** it with your instance.
+3. **Open ports** in the instance security group: `22` (SSH), `80` (HTTP), `443` (HTTPS).
+4. **SSH into the server** and run:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Bhavesh-Sony/Invite/main/deploy/setup-ec2.sh -o setup-ec2.sh
+sudo bash setup-ec2.sh yourdomain.com
+```
+
+5. **Point DNS** at your domain registrar:
+   - `A` record: `@` → your **Elastic IP**
+   - `A` record: `www` → your **Elastic IP**
+6. Wait a few minutes for DNS, then visit `https://yourdomain.com`.
+
+To update the site after pushing to GitHub:
+
+```bash
+cd /var/www/invite && sudo git pull && sudo systemctl reload nginx
+```
+
 ---
 
 ## Tips
