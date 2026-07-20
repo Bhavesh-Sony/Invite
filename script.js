@@ -390,7 +390,23 @@ const StoryController = {
 
     if (prefersReducedMotion()) {
       this.showPoster();
+      return;
     }
+
+    // Also autoplay when user scrolls down to the reel section.
+    const story = $("#story");
+    if (!story) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !this.hasPlayed && !this.running) {
+            this.play({ advanceJourney: false });
+          }
+        });
+      },
+      { threshold: 0.45 }
+    );
+    io.observe(story);
   },
 
   skip() {
@@ -816,6 +832,7 @@ const MusicPlayer = {
   async start() {
     if (!this.audio) return;
     try {
+      // First attempt audible autoplay.
       this.audio.muted = false;
       if (this.audio.paused) {
         await this.audio.play();
@@ -824,7 +841,17 @@ const MusicPlayer = {
       document.removeEventListener("pointerdown", this.resumeOnGesture, true);
       document.removeEventListener("keydown", this.resumeOnGesture, true);
     } catch {
-      this.setPlayingState(false);
+      // Fallback: autoplay muted, then unmute if possible.
+      try {
+        this.audio.muted = true;
+        if (this.audio.paused) {
+          await this.audio.play();
+        }
+        this.audio.muted = false;
+        this.setPlayingState(true);
+      } catch {
+        this.setPlayingState(false);
+      }
     }
   },
 
